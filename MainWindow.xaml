@@ -1,0 +1,59 @@
+﻿<Window x:Class="RainWorldWorkshopUploader.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:RainWorldWorkshopUploader"
+        mc:Ignorable="d"
+        Title="Rain World Workshop Uploader" SizeToContent="WidthAndHeight" ResizeMode="NoResize">
+    <Grid Height="450" Width="790">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="27*"/>
+            <ColumnDefinition Width="368*"/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="LoadModButton" Content="Select modinfo.json" HorizontalAlignment="Left" Margin="10,420,0,0" VerticalAlignment="Top" Click="SelectMod_Click" Grid.ColumnSpan="2"/>
+        <Button x:Name="SaveWorkshopDataButton" Content="Save workshopdata.json" HorizontalAlignment="Left" Margin="409,420,0,0" VerticalAlignment="Top" Click="SaveWorkshopData_Click" IsEnabled="False" Grid.Column="1"/>
+        <Button x:Name="VerifyButton" Content="Verify Mod" HorizontalAlignment="Left" Margin="545,420,0,0" VerticalAlignment="Top" Click="Verify_Click" IsEnabled="False" Grid.Column="1"/>
+        <Button x:Name="UploadButton" Content="Upload to Workshop" HorizontalAlignment="Left" Margin="612,420,0,0" VerticalAlignment="Top" Click="Upload_Click" IsEnabled="False" Grid.Column="1"/>
+        <Label Content="Title" Margin="10,13,709,411" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="TitleBox" HorizontalAlignment="Left" Margin="10,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.ColumnSpan="2"/>
+        <Label Content="Mod ID" Margin="211,13,454,411" Grid.Column="1"/>
+        <TextBox x:Name="IDBox" HorizontalAlignment="Left" Margin="211,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.Column="1"/>
+        <Label Content="Mod Version" Margin="466,13,176,411" Grid.Column="1"/>
+        <TextBox x:Name="VersionBox" HorizontalAlignment="Left" Margin="466,39,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.Column="1"/>
+        <Label Content="Requirements" Margin="10,68,685,356" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="RequirementsBox" HorizontalAlignment="Left" Margin="10,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.ColumnSpan="2"/>
+        <Label Content="Requirement Names" Margin="211,68,400,356" Grid.Column="1"/>
+        <TextBox x:Name="RequirementNamesBox" HorizontalAlignment="Left" Margin="211,99,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.Column="1"/>
+        <Label Content="Authors" Margin="466,68,145,356" Grid.Column="1"/>
+        <TextBox x:Name="AuthorBox" HorizontalAlignment="Left" Margin="466,99,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="250" Height="86" Text="" AcceptsReturn="True" Grid.Column="1"/>
+        <Label Content="Tags" Margin="466,190,145,234" Grid.Column="1"/>
+        <StackPanel x:Name="TagsPanel" Margin="466,216,10,0" Height="199" VerticalAlignment="Top" Grid.Column="1" >
+            <CheckBox Content="Arenas"/>
+            <CheckBox Content="Regions"/>
+            <CheckBox Content="Campaigns"/>
+            <CheckBox Content="Creatures"/>
+            <CheckBox Content="Game Mechanics"/>
+            <CheckBox Content="Items"/>
+            <CheckBox Content="Cosmetics"/>
+            <CheckBox Content="Game Modes"/>
+            <CheckBox Content="Dependency"/>
+            <CheckBox Content="Accessibility"/>
+            <CheckBox Content="Translations"/>
+            <CheckBox Content="Tools"/>
+        </StackPanel>
+        <Label Content="Description" Margin="10,122,655,302" Grid.ColumnSpan="2"/>
+        <TextBox x:Name="DescriptionBox" HorizontalAlignment="Left" Margin="10,148,0,0" TextWrapping="NoWrap" VerticalAlignment="Top" Width="505" Height="233" Text="" AcceptsReturn="True" Grid.ColumnSpan="2"/>
+        <Label Content="Visibility" Margin="284,394,397,30" Grid.Column="1"/>
+        <ComboBox x:Name="VisibilityBox" HorizontalAlignment="Left" Margin="284,420,0,0" VerticalAlignment="Top" Width="120" Grid.Column="1" >
+            <ComboBoxItem Content="Public"/>
+            <ComboBoxItem Content="Friends-only"/>
+            <ComboBoxItem Content="Hidden"/>
+            <ComboBoxItem Content="Unlisted" IsSelected="True"/>
+        </ComboBox>
+        <Label Content="Force Workshop ID" Margin="81,393,530,31" Grid.Column="1"/>
+        <TextBox x:Name="WorkshopIDBox" HorizontalAlignment="Left" Margin="81,422,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198" Grid.Column="1"/>
+        <Label Content="Target Game Version" Margin="81,121,530,303" Grid.Column="1"/>
+        <TextBox x:Name="TargetVersionBox" HorizontalAlignment="Left" Margin="211,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.Column="1"/>
+    </Grid>
+</Window>
