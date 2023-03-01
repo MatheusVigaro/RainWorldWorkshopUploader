@@ -106,6 +106,9 @@ namespace RainWorldWorkshopUploader
                 SetSelectedTags(SelectedMod.tags);
             }
 
+
+            UploadFilesOnly.IsChecked = SelectedMod.WorkshopData?.UploadFilesOnly ?? false;
+
             SaveWorkshopDataButton.IsEnabled = true;
             VerifyButton.IsEnabled = true;
             UploadButton.IsEnabled = true;
@@ -190,6 +193,8 @@ namespace RainWorldWorkshopUploader
                 SelectedMod.WorkshopData.Visibility = VisibilityBox.Text;
 
                 SelectedMod.WorkshopData.Tags = GetSelectedTags();
+
+                SelectedMod.WorkshopData.UploadFilesOnly = UploadFilesOnly.IsChecked;
 
                 var json = JsonSerializer.Serialize(SelectedMod.WorkshopData, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(SelectedMod.path + Path.DirectorySeparatorChar.ToString() + "workshopdata.json", json);

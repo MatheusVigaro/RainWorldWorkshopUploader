@@ -142,34 +142,40 @@ internal class RainWorldSteamManager
         }
         this.uploadingMod = mod;
         this.updateHandle = SteamUGC.StartItemUpdate(new AppId_t(RainWorldSteamManager.APP_ID), new PublishedFileId_t(mod.WorkshopData.WorkshopID));
-        SteamUGC.SetItemTitle(this.updateHandle, mod.WorkshopData.Title);
-        SteamUGC.SetItemDescription(this.updateHandle, mod.WorkshopData.Description);
-        SteamUGC.SetItemVisibility(this.updateHandle, WorkshopDataClass.VisibilityFromText(mod.WorkshopData.Visibility));
+
+
         SteamUGC.AddItemKeyValueTag(this.updateHandle, "id", mod.WorkshopData.ID);
         SteamUGC.AddItemKeyValueTag(this.updateHandle, "version", mod.WorkshopData.Version);
-        SteamUGC.AddItemKeyValueTag(this.updateHandle, "targetGameVersion", mod.WorkshopData.TargetGameVersion);
-        SteamUGC.AddItemKeyValueTag(this.updateHandle, "authors", mod.WorkshopData.Authors);
-        SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirements", mod.WorkshopData.Requirements);
-        SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirementNames", mod.WorkshopData.RequirementNames);
-        SteamUGC.SetItemTags(this.updateHandle, mod.WorkshopData.Tags);
         SteamUGC.SetItemContent(this.updateHandle, mod.path);
-        string text = mod.path + Path.DirectorySeparatorChar.ToString() + "thumbnail.png";
-        if (File.Exists(text))
+
+        if (mod.WorkshopData.UploadFilesOnly.Value == false)
         {
-            try
+            SteamUGC.SetItemTitle(this.updateHandle, mod.WorkshopData.Title);
+            SteamUGC.SetItemVisibility(this.updateHandle, WorkshopDataClass.VisibilityFromText(mod.WorkshopData.Visibility));
+            SteamUGC.SetItemDescription(this.updateHandle, mod.WorkshopData.Description);
+            SteamUGC.AddItemKeyValueTag(this.updateHandle, "targetGameVersion", mod.WorkshopData.TargetGameVersion);
+            SteamUGC.AddItemKeyValueTag(this.updateHandle, "authors", mod.WorkshopData.Authors);
+            SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirements", mod.WorkshopData.Requirements);
+            SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirementNames", mod.WorkshopData.RequirementNames);
+            SteamUGC.SetItemTags(this.updateHandle, mod.WorkshopData.Tags);
+            string text = mod.path + Path.DirectorySeparatorChar.ToString() + "thumbnail.png";
+            if (File.Exists(text))
             {
-                if (new FileInfo(text).Length < 1000000L)
+                try
                 {
-                    SteamUGC.SetItemPreview(this.updateHandle, text);
+                    if (new FileInfo(text).Length < 1000000L)
+                    {
+                        SteamUGC.SetItemPreview(this.updateHandle, text);
+                    }
+                }
+                catch
+                {
                 }
             }
-            catch
+            if (mod.trailerID != null && mod.trailerID != "")
             {
+                SteamUGC.AddItemPreviewVideo(this.updateHandle, mod.trailerID);
             }
-        }
-        if (mod.trailerID != null && mod.trailerID != "")
-        {
-            SteamUGC.AddItemPreviewVideo(this.updateHandle, mod.trailerID);
         }
         SteamAPICall_t hAPICall = SteamUGC.SubmitItemUpdate(this.updateHandle, "");
         this.updateItemCallback.Set(hAPICall, null);

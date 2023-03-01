@@ -13,6 +13,7 @@ public class WorkshopDataClass
     public string? Visibility { get; set; }
     public string[]? Tags { get; set; }
     public ulong WorkshopID { get; set; }
+    public bool? UploadFilesOnly { get; set; }
 
     public static ERemoteStoragePublishedFileVisibility VisibilityFromText(string text)
     {

@@ -55,5 +55,6 @@
         <TextBox x:Name="WorkshopIDBox" HorizontalAlignment="Left" Margin="81,422,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="198" Grid.Column="1"/>
         <Label Content="Target Game Version" Margin="81,121,530,303" Grid.Column="1"/>
         <TextBox x:Name="TargetVersionBox" HorizontalAlignment="Left" Margin="211,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.Column="1"/>
+        <CheckBox x:Name="UploadFilesOnly" Content="Only Update Files" Grid.ColumnSpan="2" Margin="10,395,660,40"/>
     </Grid>
 </Window>
