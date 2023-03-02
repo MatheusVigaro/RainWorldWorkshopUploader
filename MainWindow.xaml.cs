@@ -112,6 +112,7 @@ namespace RainWorldWorkshopUploader
             SaveWorkshopDataButton.IsEnabled = true;
             VerifyButton.IsEnabled = true;
             UploadButton.IsEnabled = true;
+            UploadThumbnailButton.IsEnabled = true;
         }
 
         private void SetSelectedTags(string[] tags)
@@ -251,6 +252,30 @@ namespace RainWorldWorkshopUploader
         {
             MessageBox.Show(message, "Error");
             IsEnabled = true;
+            ThumbnailOnly = false;
+        }
+
+        public static bool ThumbnailOnly;
+        private void UploadThumbnail_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("This will save the current data to workshopdata.json and upload only the thumbnail to the workshop.\r\nContinue?", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            SetTitle("Saving Workshop Data");
+
+            IsEnabled = false;
+
+            SaveWorkshopData();
+
+            if (!VerifyMod())
+            {
+                return;
+            }
+
+            ThumbnailOnly = true;
+            Manager.FindWorkshopItemsWithKeyValue("id", SelectedMod.WorkshopData.ID);
         }
     }
 }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Windows;
 using RainWorldWorkshopUploader;
 using Steamworks;
+using static System.Net.Mime.MediaTypeNames;
 
 internal class RainWorldSteamManager
 {
@@ -143,21 +144,9 @@ internal class RainWorldSteamManager
         this.uploadingMod = mod;
         this.updateHandle = SteamUGC.StartItemUpdate(new AppId_t(RainWorldSteamManager.APP_ID), new PublishedFileId_t(mod.WorkshopData.WorkshopID));
 
-
-        SteamUGC.AddItemKeyValueTag(this.updateHandle, "id", mod.WorkshopData.ID);
-        SteamUGC.AddItemKeyValueTag(this.updateHandle, "version", mod.WorkshopData.Version);
-        SteamUGC.SetItemContent(this.updateHandle, mod.path);
-
-        if (mod.WorkshopData.UploadFilesOnly.Value == false)
+        if (MainWindow.ThumbnailOnly)
         {
-            SteamUGC.SetItemTitle(this.updateHandle, mod.WorkshopData.Title);
-            SteamUGC.SetItemVisibility(this.updateHandle, WorkshopDataClass.VisibilityFromText(mod.WorkshopData.Visibility));
-            SteamUGC.SetItemDescription(this.updateHandle, mod.WorkshopData.Description);
-            SteamUGC.AddItemKeyValueTag(this.updateHandle, "targetGameVersion", mod.WorkshopData.TargetGameVersion);
-            SteamUGC.AddItemKeyValueTag(this.updateHandle, "authors", mod.WorkshopData.Authors);
-            SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirements", mod.WorkshopData.Requirements);
-            SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirementNames", mod.WorkshopData.RequirementNames);
-            SteamUGC.SetItemTags(this.updateHandle, mod.WorkshopData.Tags);
+            MainWindow.ThumbnailOnly = false;
             string text = mod.path + Path.DirectorySeparatorChar.ToString() + "thumbnail.png";
             if (File.Exists(text))
             {
@@ -172,9 +161,42 @@ internal class RainWorldSteamManager
                 {
                 }
             }
-            if (mod.trailerID != null && mod.trailerID != "")
+        }
+        else
+        {
+            SteamUGC.SetItemContent(this.updateHandle, mod.path);
+
+            if (mod.WorkshopData.UploadFilesOnly.Value == false)
             {
-                SteamUGC.AddItemPreviewVideo(this.updateHandle, mod.trailerID);
+                SteamUGC.AddItemKeyValueTag(this.updateHandle, "id", mod.WorkshopData.ID);
+                SteamUGC.AddItemKeyValueTag(this.updateHandle, "version", mod.WorkshopData.Version);
+
+                SteamUGC.SetItemTitle(this.updateHandle, mod.WorkshopData.Title);
+                SteamUGC.SetItemVisibility(this.updateHandle, WorkshopDataClass.VisibilityFromText(mod.WorkshopData.Visibility));
+                SteamUGC.SetItemDescription(this.updateHandle, mod.WorkshopData.Description);
+                SteamUGC.AddItemKeyValueTag(this.updateHandle, "targetGameVersion", mod.WorkshopData.TargetGameVersion);
+                SteamUGC.AddItemKeyValueTag(this.updateHandle, "authors", mod.WorkshopData.Authors);
+                SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirements", mod.WorkshopData.Requirements);
+                SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirementNames", mod.WorkshopData.RequirementNames);
+                SteamUGC.SetItemTags(this.updateHandle, mod.WorkshopData.Tags);
+                string text = mod.path + Path.DirectorySeparatorChar.ToString() + "thumbnail.png";
+                if (File.Exists(text))
+                {
+                    try
+                    {
+                        if (new FileInfo(text).Length < 1000000L)
+                        {
+                            SteamUGC.SetItemPreview(this.updateHandle, text);
+                        }
+                    }
+                    catch
+                    {
+                    }
+                }
+                if (mod.trailerID != null && mod.trailerID != "")
+                {
+                    SteamUGC.AddItemPreviewVideo(this.updateHandle, mod.trailerID);
+                }
             }
         }
         SteamAPICall_t hAPICall = SteamUGC.SubmitItemUpdate(this.updateHandle, "");

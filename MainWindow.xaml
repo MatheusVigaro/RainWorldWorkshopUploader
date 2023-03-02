@@ -56,5 +56,6 @@
         <Label Content="Target Game Version" Margin="81,121,530,303" Grid.Column="1"/>
         <TextBox x:Name="TargetVersionBox" HorizontalAlignment="Left" Margin="211,125,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="250" Grid.Column="1"/>
         <CheckBox x:Name="UploadFilesOnly" Content="Only Update Files" Grid.ColumnSpan="2" Margin="10,395,660,40"/>
+        <Button x:Name="UploadThumbnailButton" Content="Upload Thumbnail Only" HorizontalAlignment="Left" Margin="591,397,0,0" VerticalAlignment="Top" Click="UploadThumbnail_Click" IsEnabled="False" Grid.Column="1" Width="133"/>
     </Grid>
 </Window>
