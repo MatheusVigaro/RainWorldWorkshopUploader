@@ -140,13 +140,12 @@ internal class RainWorldSteamManager
             this.isCurrentlyUploading = false;
             this.lastUploadFail = "Cannot update mod with no pre-existing workshop ID.";
             return false;
-        }
+        }   
         this.uploadingMod = mod;
         this.updateHandle = SteamUGC.StartItemUpdate(new AppId_t(RainWorldSteamManager.APP_ID), new PublishedFileId_t(mod.WorkshopData.WorkshopID));
 
         if (MainWindow.ThumbnailOnly)
         {
-            MainWindow.ThumbnailOnly = false;
             string text = mod.path + Path.DirectorySeparatorChar.ToString() + "thumbnail.png";
             if (File.Exists(text))
             {
@@ -162,25 +161,34 @@ internal class RainWorldSteamManager
                 }
             }
         }
+        else if (MainWindow.ClearMetadataOnly)
+        {
+            SteamUGC.RemoveItemKeyValueTags(updateHandle, "id");
+            SteamUGC.RemoveItemKeyValueTags(updateHandle, "version");
+            SteamUGC.RemoveItemKeyValueTags(updateHandle, "targetGameVersion");
+            SteamUGC.RemoveItemKeyValueTags(updateHandle, "authors");
+            SteamUGC.RemoveItemKeyValueTags(updateHandle, "requirements");
+            SteamUGC.RemoveItemKeyValueTags(updateHandle, "requirementNames");
+        }
         else
         {
-            SteamUGC.SetItemContent(this.updateHandle, mod.path);
+            SteamUGC.SetItemContent(updateHandle, mod.path);
 
             if (mod.WorkshopData.UploadFilesOnly.Value == false)
             {
-                SteamUGC.AddItemKeyValueTag(this.updateHandle, "id", mod.WorkshopData.ID);
-                SteamUGC.AddItemKeyValueTag(this.updateHandle, "version", mod.WorkshopData.Version);
+                SteamUGC.AddItemKeyValueTag(updateHandle, "id", mod.WorkshopData.ID);
+                SteamUGC.AddItemKeyValueTag(updateHandle, "version", mod.WorkshopData.Version);
 
-                SteamUGC.SetItemTitle(this.updateHandle, mod.WorkshopData.Title);
-                SteamUGC.SetItemVisibility(this.updateHandle, WorkshopDataClass.VisibilityFromText(mod.WorkshopData.Visibility));
-                SteamUGC.SetItemDescription(this.updateHandle, mod.WorkshopData.Description);
-                SteamUGC.AddItemKeyValueTag(this.updateHandle, "targetGameVersion", mod.WorkshopData.TargetGameVersion);
-                SteamUGC.AddItemKeyValueTag(this.updateHandle, "authors", mod.WorkshopData.Authors);
-                SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirements", mod.WorkshopData.Requirements);
-                SteamUGC.AddItemKeyValueTag(this.updateHandle, "requirementNames", mod.WorkshopData.RequirementNames);
-                SteamUGC.SetItemTags(this.updateHandle, mod.WorkshopData.Tags);
-                string text = mod.path + Path.DirectorySeparatorChar.ToString() + "thumbnail.png";
-                if (File.Exists(text))
+                SteamUGC.SetItemTitle(updateHandle, mod.WorkshopData.Title);
+                SteamUGC.SetItemVisibility(updateHandle, WorkshopDataClass.VisibilityFromText(mod.WorkshopData.Visibility));
+                SteamUGC.SetItemDescription(updateHandle, mod.WorkshopData.Description);
+                SteamUGC.AddItemKeyValueTag(updateHandle, "targetGameVersion", mod.WorkshopData.TargetGameVersion);
+                SteamUGC.AddItemKeyValueTag(updateHandle, "authors", mod.WorkshopData.Authors);
+                SteamUGC.AddItemKeyValueTag(updateHandle, "requirements", mod.WorkshopData.Requirements);
+                SteamUGC.AddItemKeyValueTag(updateHandle, "requirementNames", mod.WorkshopData.RequirementNames);
+                SteamUGC.SetItemTags(updateHandle, mod.WorkshopData.Tags);
+                string text = mod.path + Path.DirectorySeparatorChar + "thumbnail.png";
+                if (File.Exists(text) && mod.WorkshopData.UploadThumbnail.Value)
                 {
                     try
                     {
@@ -199,8 +207,12 @@ internal class RainWorldSteamManager
                 }
             }
         }
-        SteamAPICall_t hAPICall = SteamUGC.SubmitItemUpdate(this.updateHandle, "");
-        this.updateItemCallback.Set(hAPICall, null);
+
+        MainWindow.ThumbnailOnly = false;
+        MainWindow.ClearMetadataOnly = false;
+
+        SteamAPICall_t hAPICall = SteamUGC.SubmitItemUpdate(updateHandle, null);
+        updateItemCallback.Set(hAPICall);
         return true;
     }
 

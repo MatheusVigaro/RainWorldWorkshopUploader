@@ -196,6 +196,7 @@ namespace RainWorldWorkshopUploader
                 SelectedMod.WorkshopData.Tags = GetSelectedTags();
 
                 SelectedMod.WorkshopData.UploadFilesOnly = UploadFilesOnly.IsChecked;
+                SelectedMod.WorkshopData.UploadThumbnail = UploadThumbnail.IsChecked;
 
                 var json = JsonSerializer.Serialize(SelectedMod.WorkshopData, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(SelectedMod.path + Path.DirectorySeparatorChar.ToString() + "workshopdata.json", json);
@@ -253,9 +254,12 @@ namespace RainWorldWorkshopUploader
             MessageBox.Show(message, "Error");
             IsEnabled = true;
             ThumbnailOnly = false;
+            ClearMetadataOnly = false;
         }
 
         public static bool ThumbnailOnly;
+        public static bool ClearMetadataOnly;
+
         private void UploadThumbnail_Click(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("This will save the current data to workshopdata.json and upload only the thumbnail to the workshop.\r\nContinue?", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
@@ -275,6 +279,28 @@ namespace RainWorldWorkshopUploader
             }
 
             ThumbnailOnly = true;
+            Manager.FindWorkshopItemsWithKeyValue("id", SelectedMod.WorkshopData.ID);
+        }
+
+        private void ClearMetadata_Click(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("This will save the current data to workshopdata.json and delete the metadata from the workshop, only use this is you're facing issues when updating your mod.\r\nContinue?", "Are you sure?", MessageBoxButton.YesNo) == MessageBoxResult.No)
+            {
+                return;
+            }
+
+            SetTitle("Clearing workshop metadata");
+
+            IsEnabled = false;
+
+            SaveWorkshopData();
+
+            if (!VerifyMod())
+            {
+                return;
+            }
+
+            ClearMetadataOnly = true;
             Manager.FindWorkshopItemsWithKeyValue("id", SelectedMod.WorkshopData.ID);
         }
     }

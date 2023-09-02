@@ -14,6 +14,7 @@ public class WorkshopDataClass
     public string[]? Tags { get; set; }
     public ulong WorkshopID { get; set; }
     public bool? UploadFilesOnly { get; set; }
+    public bool? UploadThumbnail { get; set; }
 
     public static ERemoteStoragePublishedFileVisibility VisibilityFromText(string text)
     {
