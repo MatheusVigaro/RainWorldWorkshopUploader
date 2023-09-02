@@ -113,6 +113,7 @@ namespace RainWorldWorkshopUploader
             VerifyButton.IsEnabled = true;
             UploadButton.IsEnabled = true;
             UploadThumbnailButton.IsEnabled = true;
+            ClearMetadataButton.IsEnabled = true;
         }
 
         private void SetSelectedTags(string[] tags)
